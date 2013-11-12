@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="../fragments/headFragment :: head">
+</head>
+<body>
+<header th:include="../fragments/menuFragment :: fullMenu"></header>
+<div class="container">
+    <h2>Liste des endpoints</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>qualifier</th>
+            <th>path</th>
+            <th>methods</th>
+            <th>consumes</th>
+            <th>produces</th>
+            <th>params</th>
+            <th>headers</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="endpoint : ${endpoints}">
+            <td th:text="${endpoint.value}"></td>
+            <td th:text="${endpoint.key.patternsCondition}"></td>
+            <td th:text="${endpoint.key.methodsCondition}"></td>
+            <td th:text="${endpoint.key.consumesCondition}"></td>
+            <td th:text="${endpoint.key.producesCondition}"></td>
+            <td th:text="${endpoint.key.paramsCondition}"></td>
+            <td th:text="${endpoint.key.headersCondition}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:include="../fragments/footerFragment :: footer"></footer>
+</body>
+</html>

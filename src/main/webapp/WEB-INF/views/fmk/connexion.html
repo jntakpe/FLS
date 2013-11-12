@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="../fragments/headFragment :: head"></head>
+<body>
+<header th:include="../fragments/menuFragment :: emptyMenu"></header>
+<div class="container">
+    <!--[if lt IE 9]>
+    <div id="alert-ie" class="alert alert-danger">
+        <i class="fa fa-warning-sign"></i>
+        <span>
+            Cette application ne supporte pas les versions 6, 7 et 8 d'Internet Explorer.
+        </span>
+        <button type="button" class="close">&times;</button>
+    </div>
+    <![endif]-->
+    <div id="connexion-container">
+        <div class="row" style="background-color: #FBFBFB">
+            <div class="alert alert-danger fade in" th:if="${error != null}">
+                <i class="fa fa-warning"></i>
+                <span th:text="${authentMsg}"/>
+                <button type="button" class="close">&times;</button>
+            </div>
+            <div th:if="${responseMessage != null}"
+                 th:class="${responseMessage.success} ? 'alert alert-success fade in' : 'alert alert-danger fade in'">
+                <i id="alert-icon"
+                   th:class="${responseMessage.success} ? 'fa fa-check' : 'fa fa-warning'"></i>
+                <span id="alert-message" th:text="${responseMessage.message}"/>
+                <button type="button" class="close">&times;</button>
+            </div>
+            <div>
+                <h1 th:text="#{connexion.title}"></h1>
+
+                <form role="form" class="form-horizontal" th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label class="control-label" for="username" th:text="#{connexion.login}"></label>
+
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-9 input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                                <input type="text" id="username" name="j_username" class="form-control" maxlength="40"
+                                       placeholder="Login" autocomplete="off"/>
+                            </div>
+                            <div class="col-md-1" style="bottom: -5px;left: -15px;">
+                                <i class="fa fa-question-circle fa-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="password" th:text="#{connexion.password}"></label>
+
+                        <div class="row">
+
+                            <div class="col-md-offset-1 col-md-9 input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                                <input type="password" id="password" name="j_password" class="form-control"
+                                       maxlength="40" placeholder="Password"/>
+                            </div>
+                            <div class="col-md-1" style="bottom: -5px; left:-15px;">
+                                <i class="fa fa-question-circle fa-lg" data-toggle="popover" data-placement="right"
+                                   data-trigger="hover" data-title="Login" data-container="body"
+                                   data-content="Veuillez renseigner votre login Sopra. Par exemple Jean Dupont aura pour login : jdupont"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-10">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-sign-in"></i>&nbsp;<span th:text="#{btn.valid}"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer th:include="../fragments/footerFragment :: footer"></footer>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        "use strict";
+
+        $('.connexion-help').popover();
+    });
+</script>
+</body>
+</html>

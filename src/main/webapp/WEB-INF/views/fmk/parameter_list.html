@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="../fragments/headFragment :: head"></head>
+<body>
+<header th:include="../fragments/menuFragment :: fullMenu"></header>
+<div class="container">
+    <div class="row">
+        <div th:include="../fragments/alertFragment :: alert"></div>
+        <h2 th:text="#{parameter.title}"></h2>
+
+        <div class="auto-search">
+            <div class="row"></div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search-code" th:text="#{parameter.code}"></label>
+                    <input name="code" type="email" class="form-control" id="search-code"
+                           th:placeholder="#{parameter.code}"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search-label" th:text="#{parameter.label}"></label>
+                    <input name="label" type="text" class="form-control" id="search-label"
+                           th:placeholder="#{parameter.label}"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search-format" th:text="#{parameter.format}"></label>
+                    <select name="format" class="form-control" id="search-format">
+                        <option th:text="#{select.all}" value=""></option>
+                        <option th:each="format : ${formats}" th:text="${format}" th:value="${format}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search-value" th:text="#{parameter.value}"></label>
+                    <input name="value" type="text" class="form-control" id="search-value"
+                           th:placeholder="#{parameter.value}"/>
+                </div>
+            </div>
+        </div>
+
+        <table id="dt_parameter" class="table table-striped table-bordered wrap" data-reload="true"
+               data-edit-popup="parameter_popup">
+            <thead>
+            <tr>
+                <th th:text="#{parameter.code}"></th>
+                <th th:text="#{parameter.label}"></th>
+                <th th:text="#{parameter.format}"></th>
+                <th th:text="#{parameter.value}"></th>
+                <th th:text="#{list.modify}"></th>
+                <th th:text="#{list.delete}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="6" class="dataTables_empty" th:text="#{list.load}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:replace="../fragments/buttonFragment :: newPopupFragment"></div>
+    </div>
+</div>
+<div id="parameter_popup" class="modal fade edit-popup" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title new-title" th:text="#{parameter.create}"></h3>
+
+                <h3 class="modal-title edit-title" th:text="#{parameter.edit}"></h3>
+            </div>
+            <div class="modal-body">
+                <form id="popupForm" class="form-horizontal" role="form" data-reload="true" method="post">
+                    <input type="hidden" id="id" name="id"/>
+                    <input type="hidden" id="version" name="version"/>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="code" th:text="#{parameter.code}"></label>
+
+                        <div class="col-md-10">
+                            <input type="text" id="code" name="code" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="label" th:text="#{parameter.label}"></label>
+
+                        <div class="col-md-10">
+                            <input type="text" id="label" name="label" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="format" th:text="#{parameter.format}"></label>
+
+                        <div class="col-md-10">
+                            <select class="form-control" id="format" name="format">
+                                <option th:text="#{select.none}" value=""></option>
+                                <option th:each="format : ${formats}" th:text="${format}" th:value="${format}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="value" th:text="#{parameter.value}"></label>
+
+                        <div class="col-md-10">
+                            <input type="text" id="value" name="value" class="form-control"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div th:replace="../fragments/buttonFragment :: popupButtonsFragment"></div>
+        </div>
+    </div>
+</div>
+<div th:include="../fragments/popupFragment :: confirmDeletePopupFragment"></div>
+<footer th:include="../fragments/footerFragment :: footer"></footer>
+
+<script type="text/javascript">
+    $(function () {
+        "use strict";
+        fmk.createTable(
+                "dt_parameter",
+                {
+                    sAjaxSource: "param/list",
+                    aoColumns: [
+                        {mData: "code"},
+                        {mData: "label"},
+                        {mData: "format", sWidth: 100},
+                        {mData: "value"},
+                        fmk.popupCol(),
+                        fmk.deleteCol()
+                    ]
+                },
+                {
+                    code: {
+                        required: true
+                    },
+                    label: {
+                        required: true
+                    },
+                    format: {
+                        required: true
+                    },
+                    value: {
+                        required: true,
+                        number: {
+                            depends: function () {
+                                return $('#format').val() === 'N';
+                            }
+                        }
+                    }
+                }
+        );
+    });
+</script>
+</body>
+</html>

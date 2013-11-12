@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <property name="LOGS_FOLDER" value="C:/AppEnv/fls/target/log"/>
+    <property name="SAVE_FOLDER" value="${LOGS_FOLDER}/collect"/>
+
+    <!--<logger name="org.hibernate.type" level="ALL"/>-->
+
+    <!-- Log applicatives -->
+    <appender name="log-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/fls-applicatif.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${SAVE_FOLDER}/fmk-applicatif.%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Log d'audit (sÃƒÂ©curitÃƒÂ©) -->
+    <appender name="audit-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/fmk-audit.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${SAVE_FOLDER}/fls-audit.%d{yyyyMMdd}.log.gzip</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Log de diagnostic (DEBUG) -->
+    <appender name="troubleshooting-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/fmk-troubleshooting.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOGS_FOLDER}/fls-troubleshooting.%i.log</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="fr.sg" additivity="false" level="TRACE">
+        <appender-ref ref="audit-file"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+    <root level="WARN">
+        <appender-ref ref="log-file"/>
+        <appender-ref ref="troubleshooting-file"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <!--<jms:message-driven-channel-adapter id="jmsIn"-->
+    <!--destination="requestQueue"-->
+    <!--channel="jmsInChannel"/>-->
+
+    <!--<int:channel id="jmsInChannel"/>-->
+
+
+    <!--<beans profile="default">-->
+
+    <!--<stream:stdout-channel-adapter id="stdout" channel="jmsInChannel" append-newline="true"/>-->
+
+    <!--</beans>-->
+
+    <!--<beans profile="testCase">-->
+
+    <!--<int:bridge input-channel="jmsInChannel" output-channel="queueChannel"/>-->
+
+    <!--<int:channel id="queueChannel">-->
+    <!--<int:queue/>-->
+    <!--</int:channel>-->
+
+    <!--</beans>-->
+
+</beans>
