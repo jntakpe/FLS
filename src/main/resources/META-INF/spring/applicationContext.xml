@@ -12,8 +12,8 @@
 
     <import resource="applicationContext-infrastructure.xml"/>
     <import resource="applicationContext-security.xml"/>
-    <import resource="applicationContext-integration.xml"/>
-    <import resource="sct-storage-job.xml"/>
+    <import resource="applicationContext-batch.xml"/>
+
 
     <context:component-scan base-package="fr.sg.fmk.service, fr.sg.fls.service"/>
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+       xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+          http://www.springframework.org/schema/integration
+          http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
+          http://www.springframework.org/schema/integration/jms
+          http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.2.xsd
+          http://www.springframework.org/schema/integration/jpa
+          http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-2.2.xsd">
+
+    <!-- Lit les messages arrivant dans le file MQ et les transmet au canal interne -->
+    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="sctQueue" concurrent-consumers="10"
+                                            connection-factory="mqConnectionFactory" channel="jmsInChannel"/>
+
+    <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
+    <int:channel id="jmsInChannel"/>
+
+    <!-- Transforme le message MQ à plat en un POJO -->
+    <int:transformer input-channel="jmsInChannel" ref="sctTransformer" output-channel="sctEntityChannel"/>
+
+    <!-- Canal de communication contenant les messages MQ transformés en POJO -->
+    <int:channel id="sctEntityChannel"/>
+
+    <!-- Persiste les messages MQ transformés en POJO -->
+    <int-jpa:outbound-channel-adapter channel="sctEntityChannel" entity-class="fr.sg.fls.domain.SctMessage"
+                                      persist-mode="PERSIST" entity-manager-factory="entityManagerFactory">
+        <int-jpa:transactional transaction-manager="transactionManager"/>
+    </int-jpa:outbound-channel-adapter>
+
+    <!-- Transforme une ligne brute en FieldSet (map avec en clé le nom et en valeur les caractères correspondants) -->
+    <bean id="sctTokenizer" class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
+        <property name="names"
+                  value="messageId, entity, IOIndicator, senderReference, amount, appCode, sender, receiver"/>
+        <property name="columns" value="4-68, 68-100, 174-175, 175-207, 210-226, 226-234, 253-285, 285-317"/>
+    </bean>
+
+    <!-- Map automatiquement un bean avec un FieldSet -->
+    <bean id="autoSctMapper" class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+        <property name="targetType" value="fr.sg.fls.domain.SctMessage"/>
+    </bean>
+
+</beans>

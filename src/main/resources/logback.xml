@@ -54,14 +54,14 @@
         </encoder>
     </appender>
 
-    <logger name="fr.sg" additivity="false" level="TRACE">
-        <appender-ref ref="audit-file"/>
-    </logger>
+    <!--<logger name="fr.sg" additivity="false" level="TRACE">-->
+    <!--<appender-ref ref="audit-file"/>-->
+    <!--</logger>-->
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="console"/>
-        <appender-ref ref="log-file"/>
-        <appender-ref ref="troubleshooting-file"/>
+        <!--<appender-ref ref="log-file"/>-->
+        <!--<appender-ref ref="troubleshooting-file"/>-->
     </root>
 
 </configuration>
