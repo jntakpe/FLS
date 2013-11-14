@@ -2,7 +2,7 @@
 
 <configuration>
 
-    <property name="LOGS_FOLDER" value="C:/AppEnv/fls/target/log"/>
+    <property name="LOGS_FOLDER" value="C:/AppEnv/FLS/log"/>
     <property name="SAVE_FOLDER" value="${LOGS_FOLDER}/collect"/>
 
     <!--<logger name="org.hibernate.type" level="ALL"/>-->
@@ -21,7 +21,7 @@
         </encoder>
     </appender>
 
-    <!-- Log d'audit (sÃƒÂ©curitÃƒÂ©) -->
+    <!-- Log d'audit -->
     <appender name="audit-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS_FOLDER}/fmk-audit.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -32,7 +32,7 @@
         </encoder>
     </appender>
 
-    <!-- Log de diagnostic (DEBUG) -->
+    <!-- Log de diagnostic -->
     <appender name="troubleshooting-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS_FOLDER}/fmk-troubleshooting.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">

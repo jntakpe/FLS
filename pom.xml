@@ -60,7 +60,8 @@
         <version.jackson>2.1.4</version.jackson>
         <version.quartz>2.1.7</version.quartz>
         <version.querydsl>3.2.4</version.querydsl>
-        <version.activemq>5.9.0</version.activemq>
+        <version.activemq>5.7.0</version.activemq>
+        <version.activeio>3.1.2</version.activeio>
 
         <!-- Pilote Postgresql -->
         <version.postgresql>9.3-1100-jdbc4</version.postgresql>
@@ -399,10 +400,14 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-all</artifactId>
+                <artifactId>activemq-core</artifactId>
                 <version>${version.activemq}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activeio-core</artifactId>
+                <version>${version.activeio}</version>
+            </dependency>
             <!-- Pilote postgresql -->
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -660,9 +665,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-all</artifactId>
+            <artifactId>activemq-core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activeio-core</artifactId>
+        </dependency>
         <!-- Pilote postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>

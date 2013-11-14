@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		     http://www.springframework.org/schema/batch
+		     http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
+
+    <batch:job id="sctStorageJob">
+        <batch:step id="sctStorageStep">
+            <batch:tasklet>
+                <batch:chunk reader="sctReader" writer="stupidWriter" commit-interval="1"/>
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
+
+    <bean id="sctReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+                <property name="lineTokenizer">
+                    <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
+                        <property name="names" value="versionTag, messageId, entity"/>
+                        <property name="columns" value="1-4,4-6,6-9"/>
+                    </bean>
+                </property>
+                <property name="fieldSetMapper">
+                    <bean class="fr.sg.fls.domain.SctMessageMapper"/>
+                </property>
+            </bean>
+        </property>
+        <property name="resource">
+            <bean class="fr.sg.fls.domain.SctResource">
+                <constructor-arg name="msg" value="#{jobParameters['msg']}"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository"/>
+    </bean>
+
+    <bean class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">
+        <property name="dataSource" ref="flsDS"/>
+    </bean>
+
+    <batch:job-repository data-source="flsDS" isolation-level-for-create="DEFAULT"/>
+
+</beans>
