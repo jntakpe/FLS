@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SctStorageJobLauncher {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private JobLauncher jobLauncher;
 
@@ -26,7 +24,6 @@ public class SctStorageJobLauncher {
     private Job job;
 
     public void launch(String test) {
-        logger.info("START THE FUCKING JOB");
         try {
             JobExecution jobExec = jobLauncher.run(job, new JobParametersBuilder().addString("msg", test).toJobParameters());
         } catch (Exception e) {

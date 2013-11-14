@@ -56,10 +56,10 @@
 
     <logger name="fr.sg" additivity="false" level="TRACE">
         <appender-ref ref="audit-file"/>
-        <appender-ref ref="console"/>
     </logger>
 
-    <root level="WARN">
+    <root level="INFO">
+        <appender-ref ref="console"/>
         <appender-ref ref="log-file"/>
         <appender-ref ref="troubleshooting-file"/>
     </root>
