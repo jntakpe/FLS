@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
+    <!-- Import des fichiers relatifs aux différents batchs -->
     <import resource="batch/batch-sct-storage.xml"/>
 
     <!-- Transforme des intervalles de caractères sous forme de String (ex : 8-11, 11-13, 15-40) en tableau de Range -->

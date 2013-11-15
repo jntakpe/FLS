@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Fichier de configuration du logging -->
 <configuration>
 
     <property name="LOGS_FOLDER" value="C:/AppEnv/FLS/log"/>
@@ -58,7 +59,7 @@
     <!--<appender-ref ref="audit-file"/>-->
     <!--</logger>-->
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="console"/>
         <!--<appender-ref ref="log-file"/>-->
         <!--<appender-ref ref="troubleshooting-file"/>-->

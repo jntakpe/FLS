@@ -14,17 +14,17 @@
           http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-2.2.xsd">
 
     <!-- Lit les messages arrivant dans le file MQ et les transmet au canal interne -->
-    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="sctQueue" concurrent-consumers="10"
+    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="sctQueue"
                                             connection-factory="mqConnectionFactory" channel="jmsInChannel"/>
 
     <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
-    <int:channel id="jmsInChannel"/>
+    <int:channel id="jmsInChannel" datatype="java.lang.String"/>
 
     <!-- Transforme le message MQ à plat en un POJO -->
     <int:transformer input-channel="jmsInChannel" ref="sctTransformer" output-channel="sctEntityChannel"/>
 
     <!-- Canal de communication contenant les messages MQ transformés en POJO -->
-    <int:channel id="sctEntityChannel"/>
+    <int:channel id="sctEntityChannel" datatype="fr.sg.fls.domain.SctMessage"/>
 
     <!-- Persiste les messages MQ transformés en POJO -->
     <int-jpa:outbound-channel-adapter channel="sctEntityChannel" entity-class="fr.sg.fls.domain.SctMessage"
@@ -37,6 +37,7 @@
         <property name="names"
                   value="messageId, entity, IOIndicator, senderReference, amount, appCode, sender, receiver"/>
         <property name="columns" value="4-68, 68-100, 174-175, 175-207, 210-226, 226-234, 253-285, 285-317"/>
+        <property name="strict" value="false"/>
     </bean>
 
     <!-- Map automatiquement un bean avec un FieldSet -->

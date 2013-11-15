@@ -11,9 +11,8 @@
                            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Différents imports de fichier de configuration de Spring -->
-    <import resource="applicationContext-infrastructure.xml"/>
-    <import resource="applicationContext-security.xml"/>
-    <import resource="applicationContext-batch.xml"/>
+    <import resource="applicationContext-infrastructure-test.xml"/>
+    <import resource="classpath*:META-INF/spring/applicationContext-batch.xml"/>
 
     <!-- Scan pour recherche de beans Spring -->
     <context:component-scan base-package="fr.sg.fmk.service, fr.sg.fls.service"/>

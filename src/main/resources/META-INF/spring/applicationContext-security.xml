@@ -6,8 +6,10 @@
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
+    <!-- Activation des annotations relatives à la sécurité -->
     <s:global-method-security pre-post-annotations="enabled"/>
 
+    <!-- Différents patterns d'url à sécuriser ou non -->
     <s:http pattern="/static/**" security="none"/>
     <s:http pattern="/connexion" security="none"/>
     <s:http use-expressions="true" disable-url-rewriting="true">
@@ -20,16 +22,19 @@
         </s:session-management>
     </s:http>
 
+    <!-- Connection au LDAP -->
     <s:ldap-server id="ldapContextSource" url="ldap://ptx.ldap-ad.dmsi.corp.sopra:3268/DC=emea,DC=msad,DC=sopra"
                    manager-dn="CN=N'takpe Jocelyn,OU=TOULOUSE COLOMIERS 1,OU=FR,OU=users,OU=Sopragroup,OU=UsersEmea,DC=emea,DC=msad,DC=sopra"
                    manager-password="J*ntakpe31"/>
 
+    <!-- Authentification via le LDAP -->
     <!--<s:authentication-manager>-->
     <!--<s:ldap-authentication-provider-->
     <!--user-search-base="OU=TOULOUSE COLOMIERS 1,OU=FR,OU=users,OU=Sopragroup,OU=UsersEmea"-->
     <!--user-search-filter="sAMAccountName={0}"/>-->
     <!--</s:authentication-manager>-->
 
+    <!-- Authentification en mode bouchonné -->
     <s:authentication-manager>
         <s:authentication-provider>
             <s:user-service>
@@ -40,6 +45,7 @@
         </s:authentication-provider>
     </s:authentication-manager>
 
+    <!-- Evaluation des expressions de sécurité dans les JSPs ou HTML -->
     <bean id="webexpressionHandler"
           class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
 
