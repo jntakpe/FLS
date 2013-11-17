@@ -33,6 +33,9 @@ public class SctBatchTransformer {
     @Autowired
     private BeanWrapperFieldSetMapper<SctMessage> autoSctMapper;
 
+    @Autowired
+    private Validator validator;
+
     @Transformer
     public SctMessage transform(@Payload String payload, @Header("jms_messageId") String msgId) throws BindException {
         FieldSet fs = sctLineTokenizer.tokenize(payload);

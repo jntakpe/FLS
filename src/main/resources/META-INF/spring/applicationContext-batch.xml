@@ -18,4 +18,7 @@
         </property>
     </bean>
 
+    <!-- Validation des beans (JSR 303 - bean validation) -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
 </beans>

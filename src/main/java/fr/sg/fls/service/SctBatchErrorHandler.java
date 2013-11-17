@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.integration.Message;
 import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.MessagingException;
 import org.springframework.integration.annotation.Payload;
@@ -41,7 +40,4 @@ public class SctBatchErrorHandler {
             logger.error(messageSource.getMessage("MSG00006", new Object[]{msgId}, Locale.getDefault()), e.getCause());
     }
 
-    public void handleError(Message message) {
-        System.out.println("OOPSS");
-    }
 }
