@@ -25,19 +25,24 @@ public class SctBatchErrorHandler {
     @Autowired
     private MessageSource messageSource;
 
+    /**
+     * Méthode captant les exceptions envoyés dans le canal dédié
+     *
+     * @param e wrapper de l'exception
+     */
     public void handleError(@Payload MessagingException e) {
         Logger logger = LoggerFactory.getLogger("error");
         String msgId = (String) e.getFailedMessage().getHeaders().get("jms_messageId");
         Throwable cause = e.getCause();
         if (cause instanceof MessageHandlingException) cause = cause.getCause();
         if (cause instanceof BindException)
-            logger.error(messageSource.getMessage("MSG00003", new Object[]{msgId}, Locale.getDefault()), e.getCause());
-        if (cause instanceof ConstraintViolationException)
             logger.error(messageSource.getMessage("MSG00004", new Object[]{msgId}, Locale.getDefault()), e.getCause());
-        else if (cause instanceof DataIntegrityViolationException)
+        if (cause instanceof ConstraintViolationException)
             logger.error(messageSource.getMessage("MSG00005", new Object[]{msgId}, Locale.getDefault()), e.getCause());
-        else
+        else if (cause instanceof DataIntegrityViolationException)
             logger.error(messageSource.getMessage("MSG00006", new Object[]{msgId}, Locale.getDefault()), e.getCause());
+        else
+            logger.error(messageSource.getMessage("MSG00007", new Object[]{msgId}, Locale.getDefault()), e.getCause());
     }
 
 }

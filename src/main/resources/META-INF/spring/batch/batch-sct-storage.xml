@@ -19,15 +19,7 @@
                                             auto-startup="false"/>
 
     <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
-    <int:channel id="jmsInChannel" datatype="java.lang.String">
-        <int:interceptors>
-            <int:wire-tap channel="readLogger"/>
-        </int:interceptors>
-    </int:channel>
-
-    <!-- Log les messages lus dans la file MQ -->
-    <int:logging-channel-adapter id="readLogger" level="INFO" logger-name="suivi"
-                                 expression="'Réception du message MQ : ' + headers['jms_messageId']"/>
+    <int:channel id="jmsInChannel" datatype="java.lang.String"/>
 
     <!-- Transforme le message MQ à plat en un POJO -->
     <int:transformer input-channel="jmsInChannel" ref="sctBatchTransformer" output-channel="sctEntityChannel"/>
