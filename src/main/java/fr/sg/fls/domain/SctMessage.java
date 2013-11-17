@@ -2,34 +2,53 @@ package fr.sg.fls.domain;
 
 import fr.sg.fmk.domain.GenericDomain;
 
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author jntakpe
  */
 @Entity
+@Table(name = "sct_message", uniqueConstraints = @UniqueConstraint(columnNames = {"messageId", "entity"}))
 @SequenceGenerator(name = "SG", sequenceName = "SEQ_SCT_MESSAGE")
 public class SctMessage extends GenericDomain {
 
+    @Column(nullable = false)
+    @NotNull
     private String messageId;
 
+    @Column(nullable = false)
+    @NotNull
     private String entity;
 
+    @Column(nullable = false)
+    @NotNull
     private String IOIndicator;
 
-    private String senderReference;
+    private Character senderReference;
 
-    private String amount;
+    private BigDecimal amount;
 
+    @Column(nullable = false)
+    @NotNull
     private String appCode;
 
+    @Column(nullable = false)
+    @NotNull
     private String sender;
 
+    @Column(nullable = false)
+    @NotNull
     private String receiver;
 
+    @Column(nullable = false)
+    @NotNull
     private Date filterDate;
+
+    @Transient
+    private String jmsMsgId;
 
     public String getMessageId() {
         return messageId;
@@ -55,19 +74,19 @@ public class SctMessage extends GenericDomain {
         this.IOIndicator = IOIndicator;
     }
 
-    public String getSenderReference() {
+    public Character getSenderReference() {
         return senderReference;
     }
 
-    public void setSenderReference(String senderReference) {
+    public void setSenderReference(Character senderReference) {
         this.senderReference = senderReference;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -101,6 +120,14 @@ public class SctMessage extends GenericDomain {
 
     public void setFilterDate(Date filterDate) {
         this.filterDate = filterDate;
+    }
+
+    public String getJmsMsgId() {
+        return jmsMsgId;
+    }
+
+    public void setJmsMsgId(String jmsMsgId) {
+        this.jmsMsgId = jmsMsgId;
     }
 
     @Override

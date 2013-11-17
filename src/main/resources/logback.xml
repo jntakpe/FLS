@@ -18,7 +18,7 @@
             <fileNamePattern>${SAVE_FOLDER}/fmk-applicatif.%d{yyyyMMdd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
         </encoder>
     </appender>
 
@@ -29,7 +29,7 @@
             <fileNamePattern>${SAVE_FOLDER}/fls-audit.%d{yyyyMMdd}.log.gzip</fileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
         </encoder>
     </appender>
 
@@ -44,14 +44,14 @@
             <maxFileSize>10MB</maxFileSize>
         </triggeringPolicy>
         <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
         </encoder>
     </appender>
 
     <!-- Console -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
         </encoder>
     </appender>
 
