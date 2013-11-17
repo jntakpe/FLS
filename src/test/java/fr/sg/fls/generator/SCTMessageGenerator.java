@@ -45,7 +45,9 @@ public class SCTMessageGenerator {
                     fieldValue.put(field.getLabel(), value);
                     builder.append(value);
                 } else {
-                    String value = generateRdm(length, field.getPad(), field.getType(), random.nextInt(length));
+                    int rdm = random.nextInt(length);
+                    if (field.isMandatory()) rdm++;
+                    String value = generateRdm(length, field.getPad(), field.getType(), rdm);
                     fieldValue.put(field.getLabel(), value);
                     builder.append(value);
                 }
@@ -77,8 +79,8 @@ public class SCTMessageGenerator {
         if (type.equalsIgnoreCase("string"))
             return StringUtils.rightPad(RandomStringUtils.randomAlphabetic(rdmLength), length);
         else if (type.equalsIgnoreCase("numeric"))
-            return StringUtils.rightPad(RandomStringUtils.randomNumeric(rdmLength), length);
-        else return StringUtils.rightPad(String.valueOf(sequence++), length);
+            return StringUtils.leftPad(RandomStringUtils.randomNumeric(rdmLength), length, "0");
+        else return StringUtils.leftPad(String.valueOf(sequence++), length, "0");
     }
 
 

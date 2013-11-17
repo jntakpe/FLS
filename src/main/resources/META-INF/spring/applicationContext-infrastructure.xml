@@ -30,7 +30,7 @@
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
         <property name="dataSource" ref="flsDS"/>
-        <property name="packagesToScan" value="fr.sg.fmk.domain, fr.sg.fls.domain"/>
+        <property name="packagesToScan" value="fr.sg.fls.domain"/>
         <property name="${persistence.prop.name}" value="${persistence.prop.value}"/>
     </bean>
 
@@ -43,7 +43,7 @@
     <tx:annotation-driven/>
 
     <!-- Répertoires à scanner par Spring Data JPA pour trouver les repositories -->
-    <jpa:repositories base-package="fr.sg.fmk.repository, fr.sg.fls.repository"/>
+    <jpa:repositories base-package="fr.sg.fls.repository"/>
 
     <!-- Différents scripts à exécuter avant le lancement de l'application -->
     <jdbc:initialize-database data-source="flsDS">

@@ -1,6 +1,7 @@
 package fr.sg.fls.domain;
 
-import fr.sg.fmk.domain.GenericDomain;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,39 +9,48 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
+ * POJO contenant les informations à persister récupérées dans le message SCT.
+ *
  * @author jntakpe
  */
 @Entity
 @Table(name = "sct_message", uniqueConstraints = @UniqueConstraint(columnNames = {"messageId", "entity"}))
 @SequenceGenerator(name = "SG", sequenceName = "SEQ_SCT_MESSAGE")
-public class SctMessage extends GenericDomain {
+public class SctMessage {
+
+    @Id
+    @GeneratedValue(generator = "SG", strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Version
+    private Integer version;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String messageId;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String entity;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String IOIndicator;
 
-    private Character senderReference;
+    private String senderReference;
 
     private BigDecimal amount;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String appCode;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String sender;
 
     @Column(nullable = false)
-    @NotNull
+    @NotEmpty
     private String receiver;
 
     @Column(nullable = false)
@@ -49,6 +59,22 @@ public class SctMessage extends GenericDomain {
 
     @Transient
     private String jmsMsgId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public String getMessageId() {
         return messageId;
@@ -74,11 +100,11 @@ public class SctMessage extends GenericDomain {
         this.IOIndicator = IOIndicator;
     }
 
-    public Character getSenderReference() {
+    public String getSenderReference() {
         return senderReference;
     }
 
-    public void setSenderReference(Character senderReference) {
+    public void setSenderReference(String senderReference) {
         this.senderReference = senderReference;
     }
 

@@ -14,8 +14,9 @@
           http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-2.2.xsd">
 
     <!-- Lit les messages arrivant dans le file MQ et les transmet au canal interne -->
-    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="sctQueue"
-                                            connection-factory="mqConnectionFactory" channel="jmsInChannel"/>
+    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="${jms.queue}" error-channel="sctErrorChannel"
+                                            connection-factory="mqConnectionFactory" channel="jmsInChannel"
+                                            auto-startup="false"/>
 
     <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
     <int:channel id="jmsInChannel" datatype="java.lang.String">
@@ -25,11 +26,11 @@
     </int:channel>
 
     <!-- Log les messages lus dans la file MQ -->
-    <int:logging-channel-adapter id="readLogger" level="INFO"
-                                 expression="'Réception du message MQ : ' + headers.jms_messageId"/>
+    <int:logging-channel-adapter id="readLogger" level="INFO" logger-name="suivi"
+                                 expression="'Réception du message MQ : ' + headers['jms_messageId']"/>
 
     <!-- Transforme le message MQ à plat en un POJO -->
-    <int:transformer input-channel="jmsInChannel" ref="sctTransformer" output-channel="sctEntityChannel"/>
+    <int:transformer input-channel="jmsInChannel" ref="sctBatchTransformer" output-channel="sctEntityChannel"/>
 
     <!-- Canal de communication contenant les messages MQ transformés en POJO -->
     <int:channel id="sctEntityChannel" datatype="fr.sg.fls.domain.SctMessage"/>
@@ -40,11 +41,23 @@
         <int-jpa:transactional transaction-manager="transactionManager"/>
     </int-jpa:outbound-channel-adapter>
 
+    <!-- Canal d'écoute des erreurs -->
+    <int:channel id="sctErrorChannel"/>
+
+    <!-- Gestion des erreurs -->
+    <int:service-activator input-channel="sctErrorChannel" ref="sctBatchErrorHandler" method="handleError"/>
+
+    <!-- Canal de contrôle -->
+    <int:channel id="controlChannel"/>
+
+    <!-- Bus de contrôle -->
+    <int:control-bus input-channel="controlChannel"/>
+
     <!-- Transforme une ligne brute en FieldSet (map avec en clé le nom et en valeur les caractères correspondants) -->
     <bean id="sctTokenizer" class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
         <property name="names"
                   value="messageId, entity, IOIndicator, senderReference, amount, appCode, sender, receiver"/>
-        <property name="columns" value="4-68, 68-100, 174-175, 175-207, 210-226, 226-234, 253-285, 285-317"/>
+        <property name="columns" value="5-68, 69-100, 175-175, 176-207, 211-226, 227-234, 254-285, 286-317"/>
         <property name="strict" value="false"/>
     </bean>
 

@@ -22,7 +22,7 @@
     <!-- Objet permettant de manipuler la file d'attente -->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="mqConnectionFactory"/>
-        <property name="defaultDestinationName" value="sctQueue"/>
+        <property name="defaultDestinationName" value="${jms.queue}"/>
     </bean>
 
     <!-- Objet permettant de manipuler la base de données -->
@@ -60,7 +60,7 @@
             </props>
         </property>
         <property name="dataSource" ref="flsDS"/>
-        <property name="packagesToScan" value="fr.sg.fmk.domain, fr.sg.fls.domain"/>
+        <property name="packagesToScan" value="fr.sg.fls.domain"/>
     </bean>
 
     <!-- Manager de transaction (commit ou rollback en fonction des exceptions etc ...) -->
@@ -72,7 +72,7 @@
     <tx:annotation-driven/>
 
     <!-- Répertoires à scanner par Spring Data JPA pour trouver les repositories -->
-    <jpa:repositories base-package="fr.sg.fmk.repository, fr.sg.fls.repository"/>
+    <jpa:repositories base-package="fr.sg.fls.repository"/>
 
     <!-- Différents scripts à exécuter avant le lancement de l'application -->
     <jdbc:initialize-database data-source="flsDS">

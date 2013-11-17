@@ -12,11 +12,10 @@
 
     <!-- Différents imports de fichier de configuration de Spring -->
     <import resource="applicationContext-infrastructure.xml"/>
-    <import resource="applicationContext-security.xml"/>
     <import resource="applicationContext-batch.xml"/>
 
     <!-- Scan pour recherche de beans Spring -->
-    <context:component-scan base-package="fr.sg.fmk.service, fr.sg.fls.service"/>
+    <context:component-scan base-package="fr.sg.fls.service"/>
 
     <!-- Activation de la configuration par annotations -->
     <context:annotation-config/>
@@ -26,15 +25,13 @@
 
     <!-- Déclaration des différents bundles de messages -->
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basenames">
-            <list>
-                <value>/messages/alert-messages</value>
-                <value>/messages/exception-messages</value>
-                <value>/messages/log-messages</value>
-                <value>/messages/i18n-labels</value>
-            </list>
-        </property>
+        <property name="basename" value="/messages/log-messages"/>
         <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- Propriétés de l'application -->
+    <bean id="propertySource" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="/env.properties"/>
     </bean>
 
 </beans>

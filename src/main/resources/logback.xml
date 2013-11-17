@@ -3,66 +3,73 @@
 <!-- Fichier de configuration du logging -->
 <configuration>
 
-    <property name="LOGS_FOLDER" value="C:/AppEnv/FLS/log"/>
+    <property name="LOGS_FOLDER" value="C:/AppEnv/log/fls"/>
     <property name="SAVE_FOLDER" value="${LOGS_FOLDER}/collect"/>
 
-    <!--<logger name="org.hibernate.type" level="ALL"/>-->
+    <!-- Log de suivi -->
+    <appender name="aplicative-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/fls-suivi.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${SAVE_FOLDER}/fls-error.%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} %-5level %logger{36} - %m%n</pattern>
+        </encoder>
+    </appender>
 
-    <!-- Log applicatives -->
-    <appender name="log-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_FOLDER}/fls-applicatif.log</file>
+    <!-- Log d'erreur -->
+    <appender name="error-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_FOLDER}/fls-error.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${SAVE_FOLDER}/fmk-applicatif.%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${SAVE_FOLDER}/fls-error.%d{yyyyMMdd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} %-5level %logger{36} - %m %throwable{0}%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Log d'audit -->
-    <appender name="audit-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_FOLDER}/fmk-audit.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${SAVE_FOLDER}/fls-audit.%d{yyyyMMdd}.log.gzip</fileNamePattern>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m %throwable{0}%n</pattern>
-        </encoder>
-    </appender>
-
-    <!-- Log de diagnostic -->
+    <!-- Log de diagnostic (DEBUG) -->
     <appender name="troubleshooting-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_FOLDER}/fmk-troubleshooting.log</file>
+        <file>${LOGS_FOLDER}/fls-debug.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${LOGS_FOLDER}/fls-troubleshooting.%i.log</fileNamePattern>
+            <fileNamePattern>${LOGS_FOLDER}/fls-debug.%i.log</fileNamePattern>
             <maxIndex>10</maxIndex>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <maxFileSize>10MB</maxFileSize>
         </triggeringPolicy>
         <encoder>
-            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} %-5level %logger{36} - %m%n</pattern>
         </encoder>
     </appender>
 
     <!-- Console -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss:SSS} %-5level %logger{36} - %m%n</pattern>
         </encoder>
     </appender>
 
-    <!--<logger name="fr.sg" additivity="false" level="TRACE">-->
-    <!--<appender-ref ref="audit-file"/>-->
-    <!--</logger>-->
+    <logger name="applicative" level="INFO">
+        <appender-ref ref="aplicative-file"/>
+    </logger>
 
-    <root level="INFO">
+    <logger name="error" level="WARN">
+        <appender-ref ref="error-file"/>
+    </logger>
+
+    <root level="DEBUG">
         <appender-ref ref="console"/>
-        <!--<appender-ref ref="log-file"/>-->
-        <!--<appender-ref ref="troubleshooting-file"/>-->
+        <appender-ref ref="debug-file"/>
     </root>
 
 </configuration>
