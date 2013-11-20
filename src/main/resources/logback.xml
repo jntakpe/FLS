@@ -59,17 +59,14 @@
         </encoder>
     </appender>
 
-    <logger name="applicative" level="INFO">
+    <logger name="fr.sg.fls" level="TRACE">
         <appender-ref ref="aplicative-file"/>
-    </logger>
-
-    <logger name="error" level="WARN">
-        <appender-ref ref="error-file"/>
     </logger>
 
     <root level="DEBUG">
         <appender-ref ref="console"/>
         <appender-ref ref="debug-file"/>
+        <appender-ref ref="error-file"/>
     </root>
 
 </configuration>

@@ -91,8 +91,8 @@ public class SCTStorageTests {
             chrono = stopWatch.getSplitTime();
             if (chrono > NB_MSG * 100 && chrono > 100L) break;
         }
-        if (!msgStored) Assert.fail("Les messages n'ont pas été ajoutés dans le temps imparti");
-        logger.info(NB_MSG + " messages lus et stockés en : " + chrono + " ms");
+        if (!msgStored) Assert.fail("Les messages n'ont pas Ã©tÃ© ajoutÃ©s dans le temps imparti");
+        logger.info(NB_MSG + " messages lus et stockÃ©s en : " + chrono + " ms");
         controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
     }
 

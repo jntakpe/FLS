@@ -3,41 +3,36 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
-       xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
           http://www.springframework.org/schema/integration
           http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
           http://www.springframework.org/schema/integration/jms
-          http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.2.xsd
-          http://www.springframework.org/schema/integration/jpa
-          http://www.springframework.org/schema/integration/jpa/spring-integration-jpa-2.2.xsd">
+          http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.2.xsd">
 
     <!-- Lit les messages arrivant dans le file MQ et les transmet au canal interne -->
     <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="${jms.queue}" error-channel="sctErrorChannel"
                                             connection-factory="mqConnectionFactory" channel="jmsInChannel"
-                                            auto-startup="false"/>
+                                            auto-startup="false" recovery-interval="${recovery.interval}"/>
 
     <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
     <int:channel id="jmsInChannel" datatype="java.lang.String"/>
 
     <!-- Transforme le message MQ à plat en un POJO -->
-    <int:transformer input-channel="jmsInChannel" ref="sctBatchTransformer" output-channel="sctEntityChannel"/>
+    <int:transformer input-channel="jmsInChannel" ref="sctMessageServiceImpl" method="transform"
+                     output-channel="sctEntityChannel"/>
 
     <!-- Canal de communication contenant les messages MQ transformés en POJO -->
     <int:channel id="sctEntityChannel" datatype="fr.sg.fls.domain.SctMessage"/>
 
-    <!-- Persiste les messages MQ transformés en POJO -->
-    <int-jpa:outbound-channel-adapter channel="sctEntityChannel" entity-class="fr.sg.fls.domain.SctMessage"
-                                      persist-mode="PERSIST" entity-manager-factory="entityManagerFactory">
-        <int-jpa:transactional transaction-manager="transactionManager"/>
-    </int-jpa:outbound-channel-adapter>
+    <!-- Enregistrement du message dans la base de données -->
+    <int:service-activator input-channel="sctEntityChannel" ref="sctMessageServiceImpl" method="save"/>
 
     <!-- Canal d'écoute des erreurs -->
     <int:channel id="sctErrorChannel"/>
 
     <!-- Gestion des erreurs -->
-    <int:service-activator input-channel="sctErrorChannel" ref="sctBatchErrorHandler" method="handleError"/>
+    <int:service-activator input-channel="sctErrorChannel" ref="sctMessageServiceImpl" method="handleError"/>
 
     <!-- Canal de contrôle -->
     <int:channel id="controlChannel"/>
@@ -56,6 +51,25 @@
     <!-- Map automatiquement un bean avec un FieldSet -->
     <bean id="autoSctMapper" class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
         <property name="targetType" value="fr.sg.fls.domain.SctMessage"/>
+    </bean>
+
+
+    <!-- Transforme des intervalles de caractères sous forme de String (ex : 8-11, 11-13, 15-40) en tableau de Range -->
+    <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <bean class="org.springframework.batch.support.DefaultPropertyEditorRegistrar">
+                <property name="customEditors">
+                    <map>
+                        <entry key="org.springframework.batch.item.file.transform.Range[]">
+                            <bean class="org.springframework.batch.item.file.transform.RangeArrayPropertyEditor"/>
+                        </entry>
+                        <entry key="fr.sg.fls.enums.AppCode">
+                            <bean class="fr.sg.fls.util.AppCodePropertyEditor"/>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
     </bean>
 
 </beans>

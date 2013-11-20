@@ -5,7 +5,6 @@
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jee="http://www.springframework.org/schema/jee"
-       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                            http://www.springframework.org/schema/tx
@@ -13,9 +12,7 @@
                            http://www.springframework.org/schema/jee
                            http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
                            http://www.springframework.org/schema/data/jpa
-                           http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
-                           http://www.springframework.org/schema/jdbc
-	                       http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+                           http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd">
 
     <!-- Récupération de la base de données via JNDI -->
     <jee:jndi-lookup id="flsDS" jndi-name="java:/comp/env/jdbc/flsDS" expected-type="javax.sql.DataSource"/>
@@ -45,10 +42,7 @@
     <!-- Répertoires à scanner par Spring Data JPA pour trouver les repositories -->
     <jpa:repositories base-package="fr.sg.fls.repository"/>
 
-    <!-- Différents scripts à exécuter avant le lancement de l'application -->
-    <jdbc:initialize-database data-source="flsDS">
-        <jdbc:script location="classpath:org/springframework/batch/core/schema-drop-postgresql.sql"/>
-        <jdbc:script location="classpath:org/springframework/batch/core/schema-postgresql.sql"/>
-    </jdbc:initialize-database>
+    <!-- Convertisseur Spring d'exception -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 </beans>

@@ -31,7 +31,8 @@
 
     <!-- Propriétés de l'application -->
     <bean id="propertySource" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="/env.properties"/>
+        <property name="location" value="classpath:env.properties"/>
+        <property name="fileEncoding" value="UTF-8"/>
     </bean>
 
 </beans>

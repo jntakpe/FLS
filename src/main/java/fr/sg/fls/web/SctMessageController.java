@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.Locale;
 
 /**
- * Contrôle le démarrage et l'arrêt du batch 'Extraction des données des SCT filtrés et stockage en base'
+ * ContrÃ´le le dÃ©marrage et l'arrÃªt du batch 'Extraction des donnÃ©es des SCT filtrÃ©s et stockage en base'
  *
  * @author jntakpe
  */
 @Controller
-@RequestMapping("sctbatch")
-public class SctBatchController {
+@RequestMapping("sct")
+public class SctMessageController {
 
     private final Logger logger = LoggerFactory.getLogger("applicative");
 
@@ -32,7 +32,7 @@ public class SctBatchController {
     private MessageSource messageSource;
 
     /**
-     * Lance le batch 'Extraction des données des SCT filtrés et stockage en base'
+     * Lance le batch 'Extraction des donnÃ©es des SCT filtrÃ©s et stockage en base'
      */
     @RequestMapping(value = "/start", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -42,7 +42,7 @@ public class SctBatchController {
     }
 
     /**
-     * Arrete le batch 'Extraction des données des SCT filtrés et stockage en base'
+     * Arrete le batch 'Extraction des donnÃ©es des SCT filtrÃ©s et stockage en base'
      */
     @RequestMapping(value = "/stop", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)

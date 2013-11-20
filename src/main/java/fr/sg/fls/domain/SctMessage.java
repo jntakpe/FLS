@@ -1,6 +1,8 @@
 package fr.sg.fls.domain;
 
 
+import fr.sg.fls.enums.AppCode;
+import fr.sg.fls.enums.IOIndicator;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -9,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * POJO contenant les informations à persister récupérées dans le message SCT.
+ * POJO contenant les informations rÃ©cupÃ©rÃ©es dans le file MQ sur le filtrage du SCT.
  *
  * @author jntakpe
  */
@@ -34,8 +36,8 @@ public class SctMessage {
     private String entity;
 
     @Column(nullable = false)
-    @NotEmpty
-    private String IOIndicator;
+    @Enumerated(EnumType.STRING)
+    private IOIndicator IOIndicator;
 
     private String senderReference;
 
@@ -55,10 +57,10 @@ public class SctMessage {
 
     @Column(nullable = false)
     @NotNull
-    private Date filterDate;
+    private final Date filterDate = new Date();
 
     @Transient
-    private String jmsMsgId;
+    private String JMSMessageId;
 
     public Long getId() {
         return id;
@@ -92,11 +94,11 @@ public class SctMessage {
         this.entity = entity;
     }
 
-    public String getIOIndicator() {
+    public IOIndicator getIOIndicator() {
         return IOIndicator;
     }
 
-    public void setIOIndicator(String IOIndicator) {
+    public void setIOIndicator(IOIndicator IOIndicator) {
         this.IOIndicator = IOIndicator;
     }
 
@@ -116,12 +118,12 @@ public class SctMessage {
         this.amount = amount;
     }
 
-    public String getAppCode() {
-        return appCode;
+    public AppCode getAppCode() {
+        return AppCode.parse(this.appCode);
     }
 
-    public void setAppCode(String appCode) {
-        this.appCode = appCode;
+    public void setAppCode(AppCode appCode) {
+        this.appCode = appCode.getValue();
     }
 
     public String getSender() {
@@ -144,16 +146,12 @@ public class SctMessage {
         return filterDate;
     }
 
-    public void setFilterDate(Date filterDate) {
-        this.filterDate = filterDate;
+    public String getJMSMessageId() {
+        return JMSMessageId;
     }
 
-    public String getJmsMsgId() {
-        return jmsMsgId;
-    }
-
-    public void setJmsMsgId(String jmsMsgId) {
-        this.jmsMsgId = jmsMsgId;
+    public void setJMSMessageId(String JMSMessageId) {
+        this.JMSMessageId = JMSMessageId;
     }
 
     @Override
@@ -179,7 +177,9 @@ public class SctMessage {
     @Override
     public String toString() {
         return "SctMessage{" +
-                "messageId='" + messageId + '\'' +
+                "JMSMessageId='" + JMSMessageId + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", entity='" + entity + '\'' +
                 '}';
     }
 }

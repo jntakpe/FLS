@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Générateur de messages SCT
+ * GÃ©nÃ©rateur de messages SCT
  *
  * @author jntakpe
  */

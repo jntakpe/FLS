@@ -3,7 +3,7 @@ package fr.sg.fls.generator;
 import java.util.Map;
 
 /**
- * Wrapper contenant une ligne brute de SCT et une map champ/valeur correspondante à la ligne brute
+ * Wrapper contenant une ligne brute de SCT et une map champ/valeur correspondante Ã  la ligne brute
  *
  * @author jntakpe
  */

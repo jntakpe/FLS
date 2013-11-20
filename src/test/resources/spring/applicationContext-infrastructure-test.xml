@@ -74,10 +74,7 @@
     <!-- Répertoires à scanner par Spring Data JPA pour trouver les repositories -->
     <jpa:repositories base-package="fr.sg.fls.repository"/>
 
-    <!-- Différents scripts à exécuter avant le lancement de l'application -->
-    <jdbc:initialize-database data-source="flsDS">
-        <jdbc:script location="classpath:org/springframework/batch/core/schema-drop-postgresql.sql"/>
-        <jdbc:script location="classpath:org/springframework/batch/core/schema-postgresql.sql"/>
-    </jdbc:initialize-database>
+    <!-- Convertisseur Spring d'exception -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 </beans>
