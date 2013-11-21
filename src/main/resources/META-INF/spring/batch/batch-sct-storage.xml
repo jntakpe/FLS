@@ -48,12 +48,6 @@
         <property name="strict" value="false"/>
     </bean>
 
-    <!-- Map automatiquement un bean avec un FieldSet -->
-    <bean id="autoSctMapper" class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
-        <property name="targetType" value="fr.sg.fls.domain.SctMessage"/>
-    </bean>
-
-
     <!-- Transforme des intervalles de caractères sous forme de String (ex : 8-11, 11-13, 15-40) en tableau de Range -->
     <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
         <property name="propertyEditorRegistrars">
@@ -62,9 +56,6 @@
                     <map>
                         <entry key="org.springframework.batch.item.file.transform.Range[]">
                             <bean class="org.springframework.batch.item.file.transform.RangeArrayPropertyEditor"/>
-                        </entry>
-                        <entry key="fr.sg.fls.enums.AppCode">
-                            <bean class="fr.sg.fls.util.AppCodePropertyEditor"/>
                         </entry>
                     </map>
                 </property>
