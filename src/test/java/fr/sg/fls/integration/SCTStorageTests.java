@@ -53,9 +53,9 @@ public class SCTStorageTests {
     public void batchControlTest() {
         int msgNb = 1;
         String req = "SELECT count(*) FROM sct_message";
-        controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.stop()"));
         jmsTemplate.setReceiveTimeout(1000);
-        controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.stop()"));
         Integer initialNb = jdbcTemplate.queryForObject(req, Integer.class);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -66,7 +66,7 @@ public class SCTStorageTests {
         }
         stopWatch.reset();
         assertThat(jdbcTemplate.queryForObject(req, Integer.class)).isEqualTo(initialNb);
-        controlChannel.send(new GenericMessage<String>("@jmsIn.start()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.start()"));
         stopWatch.start();
         while (true) {
             stopWatch.split();
@@ -77,7 +77,7 @@ public class SCTStorageTests {
 
     @Test
     public void readAndPersistTest() {
-        controlChannel.send(new GenericMessage<String>("@jmsIn.start()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.start()"));
         Integer initialNb = jdbcTemplate.queryForObject("SELECT count(*) FROM sct_message", Integer.class);
         enqueueMsg(NB_MSG);
         StopWatch stopWatch = new StopWatch();
@@ -93,22 +93,22 @@ public class SCTStorageTests {
         }
         if (!msgStored) Assert.fail("Les messages n'ont pas été ajoutés dans le temps imparti");
         logger.info(NB_MSG + " messages lus et stockés en : " + chrono + " ms");
-        controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.stop()"));
     }
 
 
     @Test
     public void testFailSameMessage() {
-        controlChannel.send(new GenericMessage<String>("@jmsIn.start()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.start()"));
         String req = "SELECT count(*) FROM sct_message";
         Integer initialNb = jdbcTemplate.queryForObject(req, Integer.class);
-        final SCTWrapper sctWrapper = generator.generateMessage();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        final String msg = generator.generateMessage().getMessage();
         MessageCreator messageCreator = new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(sctWrapper.getMessage());
+                return session.createTextMessage(msg);
             }
         };
         jmsTemplate.send(messageCreator);
@@ -118,22 +118,20 @@ public class SCTStorageTests {
             if (stopWatch.getSplitTime() > 1000) break;
         }
         assertThat(jdbcTemplate.queryForObject(req, Integer.class)).isEqualTo(initialNb + 1);
-        controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.stop()"));
     }
 
     @Test
     public void testFailFormatMessage() {
-        final String stupidMsg = "H";
-        controlChannel.send(new GenericMessage<String>("@jmsIn.start()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.start()"));
         String req = "SELECT count(*) FROM sct_message";
         Integer initialNb = jdbcTemplate.queryForObject(req, Integer.class);
-        final SCTWrapper sctWrapper = generator.generateMessage();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         jmsTemplate.send(new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(stupidMsg);
+                return session.createTextMessage("Stupid msg format");
             }
         });
         while (true) {
@@ -141,11 +139,11 @@ public class SCTStorageTests {
             if (stopWatch.getSplitTime() > 1000) break;
         }
         assertThat(jdbcTemplate.queryForObject(req, Integer.class)).isEqualTo(initialNb);
-        controlChannel.send(new GenericMessage<String>("@jmsIn.stop()"));
+        controlChannel.send(new GenericMessage<>("@jmsIn.stop()"));
     }
 
     private void enqueueMsg(int msgNb) {
-        final List<SCTWrapper> sctWrappers = new ArrayList<SCTWrapper>(msgNb);
+        final List<SCTWrapper> sctWrappers = new ArrayList<>(msgNb);
         for (int i = 0; i < msgNb; i++) sctWrappers.add(generator.generateMessage());
         for (int i = 0; i < msgNb; i++) {
             final int finalI = i;

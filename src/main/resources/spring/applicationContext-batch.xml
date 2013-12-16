@@ -9,10 +9,9 @@
 
     <!-- Import des fichiers relatifs aux différents batchs -->
     <import resource="batch/batch-sct-storage.xml"/>
-    <import resource="batch/batch-constitution-cre.xml"/>
 
     <!-- Enregistre différentes informations sur les batchs -->
-    <batch:job-repository id="jobRepository" isolation-level-for-create="READ_COMMITTED" data-source="flsDS"/>
+    <batch:job-repository id="jobRepository" isolation-level-for-create="READ_COMMITTED" data-source="dataSource"/>
 
     <!-- Démarre les batchs -->
     <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">

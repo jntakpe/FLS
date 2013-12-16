@@ -11,9 +11,9 @@
           http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.2.xsd">
 
     <!-- Lit les messages arrivant dans le file MQ et les transmet au canal interne -->
-    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="${jms.queue}" error-channel="sctErrorChannel"
+    <int-jms:message-driven-channel-adapter id="jmsIn" destination-name="${mq.queue.name}" error-channel="sctErrorChannel"
                                             connection-factory="mqConnectionFactory" channel="jmsInChannel"
-                                            auto-startup="false" recovery-interval="${recovery.interval}"/>
+                                            auto-startup="false" recovery-interval="${mq.recovery.interval}"/>
 
     <!-- Canal de communication contenant les message récupérés depuis la fileMQ -->
     <int:channel id="jmsInChannel" datatype="java.lang.String"/>
@@ -44,7 +44,7 @@
     <bean id="sctTokenizer" class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
         <property name="names"
                   value="messageId, entity, IOIndicator, senderReference, amount, appCode, sender, receiver"/>
-        <property name="columns" value="5-68, 69-100, 175-175, 176-207, 211-226, 227-234, 254-285, 286-317"/>
+        <property name="columns" value="6-69, 70-101, 176-176, 177-208, 212-227, 228-235, 255-286, 287-318"/>
         <property name="strict" value="false"/>
     </bean>
 

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.sg.fls</groupId>
     <artifactId>fls</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>fls</name>
     <description>Filtrage LAT SEPA</description>
@@ -11,29 +11,23 @@
     <properties>
 
         <!-- JEE API (JBoss specs) -->
-        <version.jboss.javaee>3.0.2.Final</version.jboss.javaee>
+        <version.javaee>7.0</version.javaee>
 
         <!-- Spring -->
-        <version.spring>3.2.5.RELEASE</version.spring>
+        <version.spring>4.0.0.RELEASE</version.spring>
 
         <!-- Spring Data JPA -->
-        <version.spring-data-jpa>1.4.1.RELEASE</version.spring-data-jpa>
+        <version.spring-data-jpa>1.4.3.RELEASE</version.spring-data-jpa>
 
         <!-- Spring batch -->
-        <version.spring-batch>2.2.2.RELEASE</version.spring-batch>
+        <version.spring-batch>2.2.3.RELEASE</version.spring-batch>
 
         <!-- Spring integration -->
-        <version.spring-integration>2.2.5.RELEASE</version.spring-integration>
-
-        <!-- Spring security -->
-        <version.spring-security>3.1.4.RELEASE</version.spring-security>
-
-        <!-- JPA -->
-        <version.hibernate-jpa>1.0.1.Final</version.hibernate-jpa>
+        <version.spring-integration>2.2.6.RELEASE</version.spring-integration>
 
         <!-- Hibernate version -->
         <version.hibernate>4.2.7.Final</version.hibernate>
-        <version.hibernate-validator>4.3.1.Final</version.hibernate-validator>
+        <version.hibernate-validator>5.0.1.Final</version.hibernate-validator>
         <version.hibernate-annotations>3.5.6-Final</version.hibernate-annotations>
 
         <!-- Framework de log -->
@@ -45,12 +39,13 @@
         <version.fest-assert>1.4</version.fest-assert>
 
         <!-- Dépendances tierces -->
-        <version.aspectj>1.7.3</version.aspectj>
+        <version.aspectj>1.7.4</version.aspectj>
         <version.commons-lang3>3.1</version.commons-lang3>
         <version.commons-io>2.4</version.commons-io>
         <version.commons-collections>3.2.1</version.commons-collections>
 
-        <version.guava>14.0.1</version.guava>
+        <version.hikari>1.2.1</version.hikari>
+        <version.guava>15.0</version.guava>
         <version.joda-time>2.3</version.joda-time>
         <version.joda-convert>1.5</version.joda-convert>
         <version.querydsl>3.2.4</version.querydsl>
@@ -66,10 +61,9 @@
         <dependencies>
             <!-- JEE API -->
             <dependency>
-                <groupId>org.jboss.spec</groupId>
-                <artifactId>jboss-javaee-all-6.0</artifactId>
-                <version>${version.jboss.javaee}</version>
-                <scope>provided</scope>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${version.javaee}</version>
             </dependency>
 
             <!-- Spring -->
@@ -87,12 +81,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${version.spring}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>commons-logging</artifactId>
-                        <groupId>commons-logging</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -103,12 +91,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
                 <version>${version.spring}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -134,16 +116,6 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
-                <version>${version.spring}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${version.spring}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
                 <version>${version.spring}</version>
             </dependency>
 
@@ -206,40 +178,6 @@
                 <groupId>org.springframework.integration</groupId>
                 <artifactId>spring-integration-test</artifactId>
                 <version>${version.spring-integration}</version>
-            </dependency>
-
-            <!-- Spring security -->
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-core</artifactId>
-                <version>${version.spring-security}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-config</artifactId>
-                <version>${version.spring-security}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-web</artifactId>
-                <version>${version.spring-security}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-ldap</artifactId>
-                <version>${version.spring-security}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-taglibs</artifactId>
-                <version>${version.spring-security}</version>
-            </dependency>
-
-            <!-- JPA -->
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                <version>${version.hibernate-jpa}</version>
             </dependency>
 
             <!-- Hibernate -->
@@ -311,6 +249,11 @@
 
             <!-- Dépendances tierces -->
             <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${version.hikari}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${version.aspectj}</version>
@@ -370,7 +313,6 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${version.postgresql}</version>
-                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -378,8 +320,8 @@
     <dependencies>
         <!-- JEE API -->
         <dependency>
-            <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-all-6.0</artifactId>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
         </dependency>
 
         <!-- Spring -->
@@ -423,14 +365,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
         </dependency>
 
         <!-- Spring Data JPA -->
@@ -481,34 +415,6 @@
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-test</artifactId>
-        </dependency>
-
-        <!-- Spring security -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-ldap</artifactId>
-        </dependency>
-
-        <!-- JPA -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
         </dependency>
 
         <!-- Hibernate -->
@@ -562,6 +468,10 @@
         </dependency>
 
         <!-- Dépendances tierces -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -622,8 +532,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <!-- Maven resources -->
@@ -686,25 +596,4 @@
             </resource>
         </resources>
     </build>
-    <profiles>
-        <profile>
-            <id>tomcat</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <hibernate.scope>compile</hibernate.scope>
-                <persistence.prop.name>persistenceUnitName</persistence.prop.name>
-                <persistence.prop.value>flsPU</persistence.prop.value>
-            </properties>
-        </profile>
-        <profile>
-            <id>jboss</id>
-            <properties>
-                <hibernate.scope>provided</hibernate.scope>
-                <persistence.prop.name>persistenceXmlLocation</persistence.prop.name>
-                <persistence.prop.value>classpath*:META-INF/persistence.xml</persistence.prop.value>
-            </properties>
-        </profile>
-    </profiles>
 </project>

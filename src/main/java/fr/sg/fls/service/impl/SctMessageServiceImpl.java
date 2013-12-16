@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.integration.MessagingException;
 import org.springframework.integration.annotation.Header;
 import org.springframework.integration.annotation.Payload;
+import org.springframework.integration.transformer.MessageTransformationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,17 +70,15 @@ public class SctMessageServiceImpl implements SctMessageService {
     public void handleError(@Payload MessagingException e) {
         e.printStackTrace();
         String msgId = (String) e.getFailedMessage().getHeaders().get("jms_messageId");
-        Throwable cause = e.getCause();
-        if (cause instanceof BindException)
+        if (ExceptionUtils.indexOfThrowable(e, MessageTransformationException.class) != -1)
             logger.error(messageResolver.findMessage("MSG00005", msgId));
-        else if (cause instanceof DataIntegrityViolationException)
+        else if (ExceptionUtils.indexOfThrowable(e, DataIntegrityViolationException.class) != -1)
             logger.error(messageResolver.findMessage("MSG00006", msgId));
-        else if (cause instanceof CannotCreateTransactionException)
+        else if (ExceptionUtils.indexOfThrowable(e, CannotCreateTransactionException.class) != -1)
             logger.error(messageResolver.findMessage("MSG00007"));
-        else if (ExceptionUtils.getRootCause(cause) instanceof ConstraintViolationException)
+        else if (ExceptionUtils.indexOfThrowable(e, ConstraintViolationException.class) != -1)
             logger.error(messageResolver.findMessage("MSG00008", msgId));
-        else
-            logger.error(messageResolver.findMessage("MSG00009"));
+        else logger.error(messageResolver.findMessage("MSG00009"));
     }
 
 }

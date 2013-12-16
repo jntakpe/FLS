@@ -2,17 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                            http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context-3.2.xsd
-                           http://www.springframework.org/schema/aop
-                           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+                           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <!-- Différents imports de fichier de configuration de Spring -->
     <import resource="applicationContext-infrastructure-test.xml"/>
-    <import resource="classpath*:META-INF/spring/applicationContext-batch.xml"/>
+    <import resource="classpath*:spring/applicationContext-batch.xml"/>
 
     <!-- Scan pour recherche de beans Spring -->
     <context:component-scan base-package="fr.sg.fls.service"/>
@@ -20,18 +17,13 @@
     <!-- Activation de la configuration par annotations -->
     <context:annotation-config/>
 
-    <!-- Autorisation de l'annotation @Aspect -->
-    <aop:aspectj-autoproxy/>
+    <!-- Déclaration du fichier properties de l'application -->
+    <context:property-placeholder location="classpath*:env-test.properties" file-encoding="UTF-8"/>
 
     <!-- Déclaration des différents bundles de messages -->
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="/messages/log-messages"/>
         <property name="defaultEncoding" value="UTF-8"/>
-    </bean>
-
-    <!-- Propriétés de l'application -->
-    <bean id="propertySource" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="/env.properties"/>
     </bean>
 
 </beans>
